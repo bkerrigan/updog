@@ -13,6 +13,16 @@ class UsersController < ApplicationController
     render json: @user
   end
 
+  # GET /users/1/sports
+  def sports
+    render json: @user.sports
+  end
+
+  # GET /users/1/teams
+  def teams
+    render json: @user.teams
+  end
+
   # POST /users
   def create
     @user = User.new(user_params)
