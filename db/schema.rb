@@ -12,6 +12,9 @@
 
 ActiveRecord::Schema.define(version: 2018_09_20_013117) do
 
+  # These are extensions that must be enabled in order to support this database
+  enable_extension "plpgsql"
+
   create_table "sports", force: :cascade do |t|
     t.string "name"
     t.string "icon"
@@ -21,15 +24,15 @@ ActiveRecord::Schema.define(version: 2018_09_20_013117) do
 
   create_table "teams", force: :cascade do |t|
     t.string "name"
-    t.integer "sport_id"
+    t.bigint "sport_id"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
     t.index ["sport_id"], name: "index_teams_on_sport_id"
   end
 
   create_table "user_sports", force: :cascade do |t|
-    t.integer "user_id"
-    t.integer "sport_id"
+    t.bigint "user_id"
+    t.bigint "sport_id"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
     t.index ["sport_id"], name: "index_user_sports_on_sport_id"
@@ -37,8 +40,8 @@ ActiveRecord::Schema.define(version: 2018_09_20_013117) do
   end
 
   create_table "user_teams", force: :cascade do |t|
-    t.integer "user_id"
-    t.integer "team_id"
+    t.bigint "user_id"
+    t.bigint "team_id"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
     t.index ["team_id"], name: "index_user_teams_on_team_id"
@@ -54,4 +57,9 @@ ActiveRecord::Schema.define(version: 2018_09_20_013117) do
     t.datetime "updated_at", null: false
   end
 
+  add_foreign_key "teams", "sports"
+  add_foreign_key "user_sports", "sports"
+  add_foreign_key "user_sports", "users"
+  add_foreign_key "user_teams", "teams"
+  add_foreign_key "user_teams", "users"
 end
