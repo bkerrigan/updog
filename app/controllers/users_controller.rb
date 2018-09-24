@@ -10,7 +10,7 @@ class UsersController < ApplicationController
 
   # GET /users/1
   def show
-    render json: @user
+    render json: @user.to_json(include: [:sports, :teams])
   end
 
   # GET /users/1/sports
@@ -28,7 +28,7 @@ class UsersController < ApplicationController
     @user = User.new(user_params)
 
     if @user.save
-      render json: @user, status: :created, location: @user
+      render json: @user.to_json(include: [:sports, :teams]), status: :created, location: @user
     else
       render json: @user.errors, status: :unprocessable_entity
     end
@@ -37,7 +37,7 @@ class UsersController < ApplicationController
   # PATCH/PUT /users/1
   def update
     if @user.update(user_params)
-      render json: @user
+      render json: @user.to_json(include: [:sports, :teams])
     else
       render json: @user.errors, status: :unprocessable_entity
     end
