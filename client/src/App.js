@@ -27,7 +27,7 @@ class App extends Component {
   }
   addNewUser(name, email, height, weight) {
     axios.post('users', { user: {name, email, height, weight} })
-    .then(user => this.setState({user: user}))
+    .then(user => this.setState({user: user.data}))
     .catch(error => console.log(error))
   }
   editUser (id, name, email, height, weight, sports) {
