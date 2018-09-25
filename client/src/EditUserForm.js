@@ -23,11 +23,11 @@ class EditUserForm extends Component {
     handleCheckbox = (e) => {
       let newSelectionArray;
       let newSport = this.state.sports.filter(s => s.name === e.target.innerText)[0]
-      //if(this.state.userSports.map(s => s.id).indexOf(newSport.id) > -1) {
-      //  newSelectionArray = this.state.userSports.filter(s => s.id !== newSport.id)
-      //} else {
+      if (this.state.userSports.map(s => s.id).indexOf(newSport.id) > -1) {
+        newSelectionArray = this.state.userSports.filter(s => s.id !== newSport.id)
+      } else {
         newSelectionArray = this.state.userSports.concat(newSport);
-      //}
+      }
 
       this.setState({ userSports: newSelectionArray })
     }
