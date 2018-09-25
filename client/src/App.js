@@ -15,6 +15,7 @@ class App extends Component {
   }
   componentDidMount () {
     this.getUsers()
+    this.getSports()
   }
   fetch (endpoint, options={}) {
     return new Promise((resolve, reject) => {
@@ -29,11 +30,12 @@ class App extends Component {
     .then(user => this.setState({user: user}))
     .catch(error => console.log(error))
   }
-  editUser (id, name, email, height, weight) {
+  editUser (id, name, email, height, weight, sports) {
+    let userSports = sports.filter(s => !this.state.user.sports.includes(s)).map(s => ({ sport_id: s.id }))
     axios.put( 'users/' + id, {
-        user: { name, email, height, weight }
+      user: { name, email, height, weight, user_sports_attributes: userSports }
     })
-    .then(user => this.setState({user: user}))
+    .then(user => this.setState({user: user.data}))
     .catch(error => console.log(error));
   }
   getUsers () {
@@ -47,8 +49,12 @@ class App extends Component {
     this.fetch(`users/${id}`)
       .then(user => this.setState({user: user}))
   }
+  getSports () {
+    this.fetch('sports')
+      .then(sports => this.setState({sports: sports}))
+  }
   render () {
-    let {users, user} = this.state
+    let {users, user, sports} = this.state
     return users
     ? <Container text>
         <Header as='h2' icon textAlign='center'>
@@ -75,10 +81,10 @@ class App extends Component {
       {user &&
         <Container>
           <Header as='h2'>{user.name}</Header>
-          <Modal size='mini' trigger={<Button>Edit User</Button>} closeIcon>
+          <Modal size='tiny' trigger={<Button>Edit User</Button>} closeIcon>
             <Modal.Header>Add a user</Modal.Header>
             <Modal.Content>
-              <EditUserForm user={user} key={user.id} editUser={this.editUser} />
+              <EditUserForm user={user} key={user.id} sports={sports} editUser={this.editUser} />
             </Modal.Content>
           </Modal>
           {user.email && <p>{user.email}</p>}
